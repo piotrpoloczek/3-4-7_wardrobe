@@ -23,13 +23,23 @@ public class PantHanger implements Hanger<Clothes> {
     }
 
     private Optional<Clothes> takeOffUpperClothes() {
-        Optional
+        Optional<Clothes> result = Optional.ofNullable(upperClothes);
+        upperClothes = null;
+        return result;
+    }
+
+    private Optional<Clothes> takeOfLowerClothes() {
+        Optional<Clothes> result = Optional.ofNullable(lowerClothes);
+        lowerClothes = null;
+        return result;
     }
 
     @Override
     public Optional<Clothes> takeOff(UUID id) {
-        if (clothes != null && clothes.getId().equals(id)) {
-            return takeOff();
+        if (upperClothes != null && upperClothes.getId().equals(id)) {
+            return takeOffUpperClothes();
+        } else if (lowerClothes != null && lowerClothes.getId().equals(id)) {
+            return takeOfLowerClothes();
         } else {
             return Optional.empty();
         }
@@ -44,6 +54,10 @@ public class PantHanger implements Hanger<Clothes> {
 
     @Override
     public boolean hasSlotFor(ClothesType type) {
-        return clothes == null;
+        if (type.equals(ClothesType.TROUSERS) || type.equals(ClothesType.SKIRT)) {
+            return lowerClothes == null;
+        } else if (type.equals(ClothesType.BLOUSE) || type.equals(ClothesType.SHIRT)) {
+            return upperClothes == null;
+        }
     }
 }
