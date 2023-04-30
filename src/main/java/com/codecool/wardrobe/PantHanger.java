@@ -48,7 +48,21 @@ public class PantHanger implements Hanger<Clothes> {
     @Override
     public void put(Clothes item) {
         if (item instanceof UpperClothes) {
-            if ()
+            if (this.upperClothes != null) {
+                throw new IllegalStateException("Pant Hanger can store only one upper body clothing item.");
+            }
+            this.upperClothes = item;
+        } else if (item instanceof LowerClothes) {
+            if (this.lowerClothes != null) {
+                throw new IllegalStateException("PantHanger can store only one lower body clothes (trousers or skirt)");
+            }
+            this.lowerClothes = item;
+        } else {
+            throw new IllegalArgumentException(
+                    "PantHanger can store only upper body " +
+                            "clothes (shirt or blouse) and " +
+                            "lower body clothes (trousers or skirt)"
+            );
         }
     }
 
@@ -56,7 +70,7 @@ public class PantHanger implements Hanger<Clothes> {
     public boolean hasSlotFor(ClothesType type) {
         if (type.equals(ClothesType.TROUSERS) || type.equals(ClothesType.SKIRT)) {
             return lowerClothes == null;
-        } else if (type.equals(ClothesType.BLOUSE) || type.equals(ClothesType.SHIRT)) {
+        } else {
             return upperClothes == null;
         }
     }
